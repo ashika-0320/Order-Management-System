@@ -9,6 +9,7 @@ public class Order {
     private int productId;
     private String ProductName;
     private LocalDateTime orderDate;
+    private int customerId;
 
     public Order( String productName,int productId,int totalItems) {
         this.id = counter++;
