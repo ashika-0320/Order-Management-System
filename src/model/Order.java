@@ -3,19 +3,21 @@ package model;
 import java.time.LocalDateTime;
 
 public class Order {
-    static int counter= 1;
     private int id ;
     private int totalItems;
     private int productId;
     private String ProductName;
     private LocalDateTime orderDate;
+    private double totalPrice;
+    private double price;
 
-    public Order( String productName,int productId,int totalItems) {
-        this.id = counter++;
+    public Order( Products product,int totalItems) {
         this.totalItems = totalItems;
-        this.productId = productId;
         this.orderDate = LocalDateTime.now();
-        ProductName = productName;
+        this.productId= product.getProductId();
+        this.ProductName = product.getItemName();
+        this.totalPrice = product.getPrice()*totalItems;
+        this.price = product.getPrice();
     }
 
     public int getId() {
@@ -32,10 +34,30 @@ public class Order {
 
     public void setTotalItems(int totalItems) {
         this.totalItems = totalItems;
+        recalculateTotalPrice();
+    }
+    public void recalculateTotalPrice(){
+        totalPrice=totalItems*price;
     }
 
     public int getProductId() {
-        return productId;
+       return productId;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public void setProductId(int productId) {
