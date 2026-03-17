@@ -1,6 +1,5 @@
-package repository;
+package repository.Implementation;
 
-import model.Order;
 import model.Products;
 
 import java.util.ArrayList;
@@ -8,7 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ProductsRepository {
-    List<Products> products= new ArrayList<Products>();
+    static public List<Products> products= new ArrayList<Products>();
 
     public void createProduct(Products product){
         products.add(product);
@@ -16,15 +15,18 @@ public class ProductsRepository {
     }
 
     public void removeProduct(int productId){
+        boolean found = false;
         for (Products product: products){
             if(product.getProductId()==productId){
                 products.remove(product);
                 System.out.println("Product removed succesfully 🗑️ ");
+                found= true;
                 break;
             }
-            else {
-                System.out.println("Product not found 😐");
-            }
+
+        }
+        if(!found){
+            System.out.println("Product not found");
         }
     }
 
@@ -36,6 +38,15 @@ public class ProductsRepository {
     }
         return null;
 };
+
+    public Products findProductsbyName(String name){
+        for (Products product : products){
+            if(product.getItemName().equals(name)){
+                return product;
+            }
+        }
+        return null;
+    }
 
     public void updateProduct(int id){
         System.out.println("Enter new id");

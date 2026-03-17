@@ -5,8 +5,7 @@ public class Products {
     String itemName;
     double price;
 
-    public Products(int productId, String itemName, double price) {
-        this.productId = productId;
+    public Products( String itemName, double price) {
         this.itemName = itemName;
         this.price = price;
     }
@@ -36,6 +35,6 @@ public class Products {
     }
 
     public String toString(){
-        return "Product Id:" + productId + "Item name: " +itemName + "Price: " +price;
+        return "Product Id: " + productId + ", Item name: " +itemName + ", Price: " +price;
     }
 }

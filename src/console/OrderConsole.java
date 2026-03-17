@@ -2,8 +2,10 @@ package console;
 
 import model.Order;
 import model.Products;
-import repository.OrderRepository;
-import repository.ProductsRepository;
+import repository.Implementation.OrderDAO;
+import repository.Implementation.OrderRepository;
+import repository.Implementation.ProductDAOImpl;
+import repository.Implementation.ProductsRepository;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -12,7 +14,8 @@ import java.util.Scanner;
 public class OrderConsole {
     private final Scanner sc = new Scanner(System.in);
     private final OrderRepository repo = new OrderRepository();
-    private final ProductsRepository prepo = new ProductsRepository();
+    private final OrderDAO drepo = new OrderDAO();
+    private final ProductDAOImpl prepo = new ProductDAOImpl();
 
     public void start(){
 
@@ -26,18 +29,21 @@ public class OrderConsole {
                 System.out.println("5. Exit");
 
                 int choice = sc.nextInt();
-
+                System.out.println("Choice from order console"+choice);
                 switch (choice) {
                     case 1: {
                         try {
                             System.out.println("Enter item name");
                             String itemName = sc.next();
-                            System.out.println("Enter product id");
-                            int productId = sc.nextInt();
-                            System.out.println("Enter total items");
+                            Products product = prepo.findProductsbyName(itemName);
+                            if(product == null){
+                                System.out.println("Product out of stock!!!😢");
+                                break;
+                            }
+                            System.out.println("Enter total ");
                             int totalItems = sc.nextInt();
-                            Order order = new Order(itemName, productId, totalItems);
-                            repo.addOrder(order);
+                            Order order = new Order(product, totalItems);
+                            drepo.addOrder(order);
                             break;
                         } catch (InputMismatchException e) {
                             System.out.println("Invalid entry!! Enter a number");
@@ -49,7 +55,7 @@ public class OrderConsole {
                         try {
                             System.out.println("Enter the Id to find order");
                             int id = sc.nextInt();
-                            Order order = repo.findById(id);
+                            Order order = drepo.findById(id);
                             if (order != null) {
                                 System.out.println(order);
                             } else {
@@ -69,7 +75,11 @@ public class OrderConsole {
                     case 3: {
                         try {
                             System.out.println("=====Total Orders=====");
-                            List<Order> orders = repo.getAllOrder();
+                            List<Order> orders = drepo.getAllOrder();
+                            if(orders==null){
+                                System.out.println("There is no items in the cart🛒.Click 1 to make a order");
+                                break;
+                            }
                             for (Order order : orders) {
                                 System.out.println(order);
                             }
@@ -82,11 +92,12 @@ public class OrderConsole {
 
                     case 4:{
                         try {
-                            System.out.println("=====All Products=====");
                             List<Products> products = prepo.getAllProducts();
-                            for (Products product : products) {
-                                System.out.println(product);
+                            if(products== null){
+                                System.out.println("There are no products added! Reach out in 10 minutes!");
+                                break;
                             }
+                            System.out.println(products);
                             break;
                         }
                         catch (Exception e){
@@ -94,7 +105,7 @@ public class OrderConsole {
                         }
                     }
 
-                    case 5:{
+                    case 5: {
                         System.out.println("Exiting....");
                         return;
                     }

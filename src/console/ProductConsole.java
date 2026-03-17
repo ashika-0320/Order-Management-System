@@ -1,8 +1,8 @@
 package console;
 
-import model.Order;
 import model.Products;
-import repository.ProductsRepository;
+import repository.Implementation.ProductDAOImpl;
+import repository.Implementation.ProductsRepository;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -11,6 +11,7 @@ import java.util.Scanner;
 public class ProductConsole {
     Scanner sc = new Scanner(System.in);
     ProductsRepository repo= new ProductsRepository();
+    ProductDAOImpl prepo = new ProductDAOImpl();
 
     public void start(){
         loop:
@@ -21,26 +22,29 @@ public class ProductConsole {
             System.out.println("3.Update Product");
             System.out.println("4.View All Products");
             System.out.println("5.Exit");
-            int choice = sc.nextInt();
+        int choice = sc.nextInt();
+
+        System.out.println("Choice from product console"+choice);
 
             switch (choice) {
                 case 1: {
                     try {
-                        System.out.println("enter id");
-                        int id = sc.nextInt();
                         System.out.println("enter product name");
                         String productName = sc.next();
                         System.out.println("Enter price");
                         double price = sc.nextDouble();
-                        Products product = new Products(id, productName, price);
-                        repo.createProduct(product);
+                        Products product = new Products(productName, price);
+                        prepo.createProduct(product);
                         break;
                     }
                     catch (InputMismatchException e){
                         System.out.println("Invalid input!! Enter valid number");
+                        sc.nextLine();
+                        break loop;
                     }
                     catch (Exception e){
                         System.out.println("An error has occurred!!" + e.getMessage());
+                        break loop;
                     }
                 }
 
@@ -48,11 +52,12 @@ public class ProductConsole {
                     try {
                         System.out.println("Enter id of the product to remove");
                         int id = sc.nextInt();
-                        repo.removeProduct(id);
+                        prepo.removeProduct(id);
                         break;
                     }
                     catch (InputMismatchException e){
                         System.out.println("Invalid input!! Enter valid number");
+                        break loop;
                     }
                 }
 
@@ -60,18 +65,20 @@ public class ProductConsole {
                     try {
                         System.out.println("Enter id of the product to update");
                         int id = sc.nextInt();
-                        repo.updateProduct(id);
+                        prepo.updateProduct(id);
                         break;
                     }
                     catch (InputMismatchException e){
                         System.out.println("Invalid input!! Enter valid number");
+                        sc.nextLine();
+                        break loop;
                     }
                 }
 
                 case 4: {
                     try{
                         System.out.println("=====All Products=====");
-                        List<Products> products = repo.getAllProducts();
+                        List<Products> products = prepo.getAllProducts();
                         for (Products product : products) {
                             System.out.println(product);
                         }
@@ -79,6 +86,7 @@ public class ProductConsole {
                     }
                     catch (Exception e){
                         System.out.println("An error occured while listing orders" + e.getMessage());
+                        break loop;
                     }
                 }
 
