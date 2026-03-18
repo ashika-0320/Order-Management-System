@@ -29,9 +29,9 @@ public class ProductConsole {
             switch (choice) {
                 case 1: {
                     try {
-                        System.out.println("enter product name");
+                        System.out.println("Enter Product Name");
                         String productName = sc.next();
-                        System.out.println("Enter price");
+                        System.out.println("Enter Price of Product");
                         double price = sc.nextDouble();
                         Products product = new Products(productName, price);
                         prepo.createProduct(product);
@@ -50,7 +50,11 @@ public class ProductConsole {
 
                 case 2: {
                     try {
-                        System.out.println("Enter id of the product to remove");
+                        List<Products> products= prepo.getAllProducts();
+                        for (Products product : products) {
+                            System.out.println(product);
+                        }
+                        System.out.println("Enter id of the product you want to remove");
                         int id = sc.nextInt();
                         prepo.removeProduct(id);
                         break;
@@ -63,6 +67,10 @@ public class ProductConsole {
 
                 case 3: {
                     try {
+                        List<Products> products= prepo.getAllProducts();
+                        for (Products product : products) {
+                            System.out.println(product);
+                        }
                         System.out.println("Enter id of the product to update");
                         int id = sc.nextInt();
                         prepo.updateProduct(id);

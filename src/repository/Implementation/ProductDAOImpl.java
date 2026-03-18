@@ -39,7 +39,7 @@ public class ProductDAOImpl implements ProductDAOInterface {
             Statement st = con.createStatement();
             int rowsAffected =st.executeUpdate(sql);
 
-            if(rowsAffected<0){
+            if(rowsAffected<=0){
                 System.out.println("Product not found!!");
             }
             else {
@@ -59,7 +59,7 @@ public class ProductDAOImpl implements ProductDAOInterface {
     public Products findProductbyId(int id) {
         DBconnection db = new DBconnection();
         try{
-            String sql ="Select *From products Where itemName = "+ id;
+            String sql ="Select *From products Where productId = "+ id;
             Connection con = db.getConnection();
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);

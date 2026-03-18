@@ -1,0 +1,42 @@
+
+================RECIEPT================
+
+Order Id: 1
+Product Id: 0
+Product Name: Chicken Biryani
+Price: 200.0
+Quantity: 400
+Total: 80000.0
+Date: 2026-03-18T15:04:17.377076200
+=======================================================
+
+Order Id: 3
+Product Id: 0
+Product Name: rakura
+Price: 45.0
+Quantity: 90
+Total: 4050.0
+Date: 2026-03-18T15:04:17.377076200
+=======================================================
+
+Order Id: 4
+Product Id: 0
+Product Name: tea
+Price: 34.0
+Quantity: 68
+Total: 2312.0
+Date: 2026-03-18T15:04:17.377076200
+=======================================================
+
+Order Id: 9
+Product Id: 0
+Product Name: Shirt
+Price: 600.0
+Quantity: 1200
+Total: 720000.0
+Date: 2026-03-18T15:04:17.377076200
+=======================================================
+=================GRAND TOTAL===============
+1758.0
+==========STATUS==========
+PAID
