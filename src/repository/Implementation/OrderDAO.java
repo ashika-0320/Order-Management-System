@@ -28,9 +28,9 @@ public class OrderDAO implements OrderDAOInterface {
             ps.executeUpdate();
             System.out.println("Order saved successfully");
         }
-//        catch (SQLIntegrityConstraintViolationException e){
-//            System.out.println("The order id already exists.Try again with another!");
-//        }
+        catch (SQLIntegrityConstraintViolationException e){
+            System.out.println("The order id already exists.Try again with another!");
+        }
         catch (SQLException e){
             System.out.println("Failed to save order");
             e.printStackTrace();
@@ -60,6 +60,27 @@ public class OrderDAO implements OrderDAOInterface {
         return null;
     }
 
+    public void removeOrder(int id){
+        String sql = "Delete From orders where id=?";
+        try{
+            Connection con=db.getConnection();
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setInt(1, id);
+            int rows = st.executeUpdate();
+
+            if(rows<0){
+                System.out.println("Failed to delete.");
+            }
+            else{
+                System.out.println("Item deleted succesfully!");
+            }
+
+        }
+        catch (SQLException e){
+            System.out.println("Failed to retrieve order");
+        }
+    }
+
     public List<Order> getAllOrder(){
         List<Order> orders=new ArrayList<Order>();
         String sql ="Select *from orders";
@@ -78,12 +99,16 @@ public class OrderDAO implements OrderDAOInterface {
                 double price = rs.getDouble(6);
                 Products product = new Products(productName,price/totalItems);
                 Order order= new Order(product, rs.getInt(6));
+                order.setId(id);
                 orders.add(order);
             }
         }
         catch (SQLException e){
             System.out.println("Failed to get all orders!");
+            e.printStackTrace();
         }
         return orders;
     }
+
+
 }

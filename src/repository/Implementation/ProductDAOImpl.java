@@ -39,7 +39,7 @@ public class ProductDAOImpl implements ProductDAOInterface {
             Statement st = con.createStatement();
             int rowsAffected =st.executeUpdate(sql);
 
-            if(rowsAffected<0){
+            if(rowsAffected<=0){
                 System.out.println("Product not found!!");
             }
             else {
@@ -59,7 +59,7 @@ public class ProductDAOImpl implements ProductDAOInterface {
     public Products findProductbyId(int id) {
         DBconnection db = new DBconnection();
         try{
-            String sql ="Select *From products Where itemName = "+ id;
+            String sql ="Select *From products Where productId = "+ id;
             Connection con = db.getConnection();
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -165,5 +165,23 @@ public class ProductDAOImpl implements ProductDAOInterface {
 
         System.out.println("There are no products in Stock!");
         return List.of();
+    }
+
+    public void loadFileDataToDB(List<Products>productsList){
+        for(Products products: productsList){
+            String sql = "Insert into products (itemName, price) values(?,?)";
+            try{
+                Connection con = db.getConnection();
+                PreparedStatement st= con.prepareStatement(sql);
+                String itemName= products.getItemName();
+                double price = products.getPrice();
+                st.setString(1,itemName);
+                st.setDouble(2,price);
+                st.executeUpdate();
+                System.out.println("Products Added Sucessfully");
+            } catch (SQLException e) {
+                System.out.println("Failed to add data to database");
+            }
+        }
     }
 }

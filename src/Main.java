@@ -8,10 +8,13 @@ public class Main {
         OrderConsole orderConsole = new OrderConsole();
         ProductConsole productConsole = new ProductConsole();
         while (true) {
-            System.out.println("=====Choose a role=====");
-            System.out.println("1.Customer");
-            System.out.println("2.Admin");
-            System.out.println("3.Exit");
+            System.out.println("========================================");
+            System.out.println("          👤 Choose Your Role 👤          ");
+            System.out.println("========================================");
+            System.out.println("1️⃣  Customer");
+            System.out.println("2️⃣  Admin");
+            System.out.println("3️⃣  Exit");
+            System.out.print("Enter your choice: ");
             int choice = sc.nextInt();
             switch (choice) {
                 case 1:

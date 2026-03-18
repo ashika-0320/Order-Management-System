@@ -3,6 +3,7 @@ package console;
 import model.Products;
 import repository.Implementation.ProductDAOImpl;
 import repository.Implementation.ProductsRepository;
+import service.LoadFileData;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -21,7 +22,8 @@ public class ProductConsole {
             System.out.println("2.Remove Product");
             System.out.println("3.Update Product");
             System.out.println("4.View All Products");
-            System.out.println("5.Exit");
+        System.out.println("5.Load data from file");
+            System.out.println("6.Exit");
         int choice = sc.nextInt();
 
         System.out.println("Choice from product console"+choice);
@@ -29,9 +31,9 @@ public class ProductConsole {
             switch (choice) {
                 case 1: {
                     try {
-                        System.out.println("enter product name");
+                        System.out.println("Enter Product Name");
                         String productName = sc.next();
-                        System.out.println("Enter price");
+                        System.out.println("Enter Price of Product");
                         double price = sc.nextDouble();
                         Products product = new Products(productName, price);
                         prepo.createProduct(product);
@@ -50,7 +52,11 @@ public class ProductConsole {
 
                 case 2: {
                     try {
-                        System.out.println("Enter id of the product to remove");
+                        List<Products> products= prepo.getAllProducts();
+                        for (Products product : products) {
+                            System.out.println(product);
+                        }
+                        System.out.println("Enter id of the product you want to remove");
                         int id = sc.nextInt();
                         prepo.removeProduct(id);
                         break;
@@ -63,6 +69,10 @@ public class ProductConsole {
 
                 case 3: {
                     try {
+                        List<Products> products= prepo.getAllProducts();
+                        for (Products product : products) {
+                            System.out.println(product);
+                        }
                         System.out.println("Enter id of the product to update");
                         int id = sc.nextInt();
                         prepo.updateProduct(id);
@@ -91,6 +101,16 @@ public class ProductConsole {
                 }
 
                 case 5:{
+                    System.out.println("File data executed");
+                    LoadFileData fileData = new LoadFileData();
+                    fileData.openFile();
+                    List<Products> productList= fileData.readFile();
+                    prepo.loadFileDataToDB(productList);
+                    fileData.closeFile();
+                    break;
+                }
+
+                case 6:{
                     break loop;
                 }
 
