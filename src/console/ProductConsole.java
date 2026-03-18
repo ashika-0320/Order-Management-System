@@ -3,6 +3,7 @@ package console;
 import model.Products;
 import repository.Implementation.ProductDAOImpl;
 import repository.Implementation.ProductsRepository;
+import service.LoadFileData;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -21,7 +22,8 @@ public class ProductConsole {
             System.out.println("2.Remove Product");
             System.out.println("3.Update Product");
             System.out.println("4.View All Products");
-            System.out.println("5.Exit");
+        System.out.println("5.Load data from file");
+            System.out.println("6.Exit");
         int choice = sc.nextInt();
 
         System.out.println("Choice from product console"+choice);
@@ -99,6 +101,16 @@ public class ProductConsole {
                 }
 
                 case 5:{
+                    System.out.println("File data executed");
+                    LoadFileData fileData = new LoadFileData();
+                    fileData.openFile();
+                    List<Products> productList= fileData.readFile();
+                    prepo.loadFileDataToDB(productList);
+                    fileData.closeFile();
+                    break;
+                }
+
+                case 6:{
                     break loop;
                 }
 

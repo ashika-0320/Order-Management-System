@@ -166,4 +166,22 @@ public class ProductDAOImpl implements ProductDAOInterface {
         System.out.println("There are no products in Stock!");
         return List.of();
     }
+
+    public void loadFileDataToDB(List<Products>productsList){
+        for(Products products: productsList){
+            String sql = "Insert into products (itemName, price) values(?,?)";
+            try{
+                Connection con = db.getConnection();
+                PreparedStatement st= con.prepareStatement(sql);
+                String itemName= products.getItemName();
+                double price = products.getPrice();
+                st.setString(1,itemName);
+                st.setDouble(2,price);
+                st.executeUpdate();
+                System.out.println("Products Added Sucessfully");
+            } catch (SQLException e) {
+                System.out.println("Failed to add data to database");
+            }
+        }
+    }
 }
