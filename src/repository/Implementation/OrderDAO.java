@@ -3,6 +3,7 @@ import model.Order;
 import model.Products;
 import repository.DBconnection;
 import repository.Interface.OrderDAOInterface;
+import service.Reciept;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -46,7 +47,7 @@ public class OrderDAO implements OrderDAOInterface {
             ResultSet rs=st.executeQuery(sql);
 
             if(rs.next()){
-                Products product =new Products(rs.getString("productName"),rs.getDouble("totalPrice")/rs.getDouble("totalItems"));
+                Products product =new Products(rs.getString("productName"),rs.getDouble("totalPrice")/rs.getDouble("totalItems"), rs.getLong("availableQty"));
                 int totalItems=rs.getInt("totalItems");
                 Order order = new Order(product,totalItems);
                 order.setId(rs.getInt(id));
@@ -83,22 +84,25 @@ public class OrderDAO implements OrderDAOInterface {
 
     public List<Order> getAllOrder(){
         List<Order> orders=new ArrayList<Order>();
-        String sql ="Select *from orders";
+        String sql ="Select o.id, o.totalItems, o.productId, o.productName, o.orderDate, o.totalPrice, p.availableQty from orders o join products p on o.productId = p.productId";
+
         try{
             Connection con = db.getConnection();
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
 
             while(rs.next()){
-                int id= rs.getInt(1);
-                int totalItems= rs.getInt(2);
-                int productId = rs.getInt(3);
-                String productName= rs.getString(4);
-                Timestamp ts= rs.getTimestamp(5);
+                int id= rs.getInt("id");
+                int totalItems= rs.getInt("totalItems");
+                int productId = rs.getInt("productId");
+                String productName= rs.getString("productName");
+                Timestamp ts= rs.getTimestamp("orderDate");
                 LocalDateTime orderDate = ts.toLocalDateTime();
-                double price = rs.getDouble(6);
-                Products product = new Products(productName,price/totalItems);
-                Order order= new Order(product, rs.getInt(6));
+                double price = rs.getDouble("totalPrice");
+                long qty = rs.getLong("availableQty");
+                Products product = new Products(productName,price/totalItems, qty);
+                product.setProductId(productId);
+                Order order= new Order(product, totalItems);
                 order.setId(id);
                 orders.add(order);
             }
@@ -109,6 +113,24 @@ public class OrderDAO implements OrderDAOInterface {
         }
         return orders;
     }
+
+    public void clearCart (){
+        String sql = "Delete from orders";
+        try{
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            int rows=st.executeUpdate(sql);
+            if(rows != 0){
+                System.out.println("Cart cleared");
+            }
+        }
+        catch(SQLException e){
+            System.out.println("Failed to delete");
+            e.printStackTrace();
+        }
+    }
+
+
 
 
 }

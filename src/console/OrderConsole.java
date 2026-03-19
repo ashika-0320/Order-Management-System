@@ -47,18 +47,27 @@ public class OrderConsole {
                             for (Products product : products) {
                                 System.out.println(product);
                             }
-                            System.out.println("Enter item name");
-                            String itemName = sc.next();
-                            Products product = prepo.findProductsbyName(itemName);
+                            System.out.println("Enter product id");
+                            int id = sc.nextInt();
+                            System.out.println("Quantity:");
+                            int qty = sc.nextInt();
+                            Products product = prepo.findProductbyId(id);
                             if(product == null){
                                 System.out.println("Product out of stock😢. Press 4 to view available products.");
                                 break;
                             }
-                            System.out.println("No. of items:  ");
-                            int totalItems = sc.nextInt();
-                            Order order = new Order(product, totalItems);
+                            else{
+                                System.out.println("#########Checking qty!!!!");
+                                long available= prepo.checkAvailability(id,qty);
+                                System.out.println(available);
+                                if(available<0){
+                                    System.out.println("Product out of stock.");
+                                    break;
+                                }
+                            }
+
+                            Order order = new Order(product, qty);
                             drepo.addOrder(order);
-                            System.out.println("SUCESS! Item added to cart");
                             System.out.println("=========CART Updated=========");
                             List<Order> orders = drepo.getAllOrder();
                             if(orders==null){
@@ -172,10 +181,13 @@ public class OrderConsole {
                             reciept.recieptGen(orders, TotalPrice);
                             System.out.println("RECIEPT HAS BEEN GENERATED!");
                             System.out.println("\nTHANK YOU FOR VISITING! SEE YOU NEXT TIME😊");
+
                         }
                         else{
                             System.out.println("Transaction Succeeded!");
+                            drepo.clearCart();
                         }
+
                         break;
                     }
 

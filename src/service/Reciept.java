@@ -1,6 +1,7 @@
 package service;
 
 import model.Order;
+import repository.Implementation.OrderDAO;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class Reciept {
+    private OrderDAO repo = new OrderDAO();
 
     public void recieptGen(List<Order> orders, double amount){
         try{
@@ -31,6 +33,7 @@ public class Reciept {
             recieptWriter.write("\n==========STATUS==========\n");
             recieptWriter.write("PAID");
             recieptWriter.close();
+            repo.clearCart();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

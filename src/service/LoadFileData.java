@@ -28,7 +28,8 @@ public class LoadFileData {
         while (Reader.hasNextLine()){
             String name = Reader.next();
             double price = Reader.nextDouble();
-            Products product= new Products(name,price);
+            long qty= Reader.nextLong();
+            Products product= new Products(name,price,qty);
             products.add(product);
         }
         System.out.println(products);

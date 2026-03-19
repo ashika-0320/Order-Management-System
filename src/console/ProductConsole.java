@@ -26,17 +26,29 @@ public class ProductConsole {
             System.out.println("6.Exit");
         int choice = sc.nextInt();
 
-        System.out.println("Choice from product console"+choice);
+        sc.nextLine();
 
             switch (choice) {
                 case 1: {
                     try {
                         System.out.println("Enter Product Name");
-                        String productName = sc.next();
-                        System.out.println("Enter Price of Product");
-                        double price = sc.nextDouble();
-                        Products product = new Products(productName, price);
-                        prepo.createProduct(product);
+                        String productName = sc.nextLine();
+                        int found = prepo.findProductsbyName(productName);
+                        if(found!=0){
+                            System.out.println("Enter Quantity");
+                            long qty= sc.nextLong();
+                            prepo.appendProduct(found,qty);
+                        }
+                        else{
+                            System.out.println("Enter Price of Product");
+                            double price = sc.nextDouble();
+                            System.out.println("Enter Quantity");
+                            long qty= sc.nextLong();
+                            Products product = new Products(productName, price,qty);
+                            prepo.createProduct(product);
+                        }
+
+
                         break;
                     }
                     catch (InputMismatchException e){
